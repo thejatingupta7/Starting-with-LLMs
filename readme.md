@@ -121,7 +121,7 @@ streamlit run app2.py
 
 ---
 
-## Viusalize the vectorstore in 3d
+# Viusalize the vectorstore in 3d
 
 First install `plotly`
 
@@ -133,3 +133,22 @@ Then run the `visual.ipynb` notebook.
 
 ---
 
+# Ollama commands to add, remove, stop, run... models
+
+| Command | Use (Keywords) |
+| :-- | :-- |
+| `ollama serve` | Start server, enable API |
+| `ollama run <model>` | Run model, interact |
+| `ollama pull <model>` | Download model |
+| `ollama list` | List downloaded models |
+| `ollama ps` | Show running models |
+| `ollama stop <model>` | Stop running model |
+| `ollama rm <model>` | Remove model |
+| `ollama show <model>` | Show model details |
+| `ollama create <new_model>` | Create custom model |
+| `ollama help` | Command help, usage info |
+| `ollama --version` | Show Ollama version |
+
+These commands form the foundation for managing and interacting with models in Ollama via the command line.
+
+---
