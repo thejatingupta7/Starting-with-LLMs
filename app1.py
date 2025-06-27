@@ -45,7 +45,7 @@ def get_response_stream(query):
         ]
 
         stream = chat(
-            model='llama3.1:8b', # llama3.1:8b
+            model='llama3.2:1b', # smaller models doesnt follow Sys. prompt well, Try going for llama3.2:3b or higher, as per your capacity of system 
             messages=messages,
             stream=True,
         )
