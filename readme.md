@@ -1,5 +1,11 @@
 # 🧠 Starting with LLMs
 
+![Bravo!](https://i.pinimg.com/originals/ef/8b/bd/ef8bbd4554dedcc2fd1fd15ab0ebd7a1.gif)
+
+Don't be like this cat, just try for once, the repo guides damn well: 😊😏
+
+---
+
 A quick guide to get started with local LLMs using Python, Ollama, and Streamlit.
 
 ---
@@ -84,7 +90,11 @@ pip install ollama torch transformers datasets scikit-learn ipykernel streamlit 
    
 #### Backend Data Flow
 
-Run `ollama serve` in a new termnial.
+![image](https://github.com/user-attachments/assets/d4e2e072-5b98-4ac6-9c3a-6a2b28da77ce)
+
+You see this ollama, you  may right click on it, to close it from keep runnning in background.
+
+Run `ollama serve` in a new termnial `cmd`, outside VS code.
 
 </i>
 
@@ -121,6 +131,11 @@ streamlit run app2.py
 
 ---
 
+![Bravo!](https://media.tenor.com/dk14TWjRq5AAAAAM/bravo-gif.gif)         
+You did it!!! ✅🎊
+
+---
+
 # Viusalize the vectorstore in 3d
 
 First install `plotly`
@@ -132,6 +147,9 @@ pip install plotly nbformat>=4.2.0
 Then run the `visual.ipynb` notebook. 
 
 ---
+When you actually see the vectorstore visually, you be like:<br>
+![Bravo!](https://media.tenor.com/swYDigA0_sAAAAAM/reactions.gif)
+
 
 # Ollama commands to add, remove, stop, run... models
 
