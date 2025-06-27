@@ -22,12 +22,26 @@ cd Starting-with-LLMs
 
 ## 🛠️ Environment Setup
 
-### Create and Activate a Virtual Environment
+### Create a Virtual Environment
 
 ```powershell
 python -m venv myenv
-myenv\Scripts\activate       # or .\myenv\Scripts\Activate.ps1
 ```
+
+### Activate the virtual Env.
+
+```powershell
+myenv\Scripts\activate       
+```
+or 
+```powershell
+.\myenv\Scripts\Activate.ps1
+```
+If above gives error: try running this in terminal, then activate:
+```powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
 
 ---
 
@@ -37,13 +51,13 @@ myenv\Scripts\activate       # or .\myenv\Scripts\Activate.ps1
 
 ```bash
 pip install torch torchvision torchaudio --force-reinstall --index-url https://download.pytorch.org/whl/cu118
-pip install ollama transformers datasets scikit-learn ipykernel streamlit faiss-cpu hf-xet langchain langchain-community sentence-transformers openpyxl pymupdf
+pip install ollama transformers datasets scikit-learn ipykernel streamlit faiss-cpu hf-xet langchain langchain-community sentence-transformers openpyxl pymupdf 
 ```
 
 ### For CPU Users:
 
 ```bash
-pip install ollama torch transformers datasets scikit-learn ipykernel streamlit faiss-cpu hf-xet langchain langchain-community sentence-transformers openpyxl pymupdf
+pip install ollama torch transformers datasets scikit-learn ipykernel streamlit faiss-cpu hf-xet langchain langchain-community sentence-transformers openpyxl pymupdf 
 ```
 
 ---
@@ -79,6 +93,8 @@ Run `ollama serve` in a new termnial.
 
 ## 🚀 Run the Apps
 
+Inside apps files, `app1.py` and `app2.py`, change the system prompt according to your need.
+
 ### 1. Basic Chat UI (`app1.py`)
 
 ```bash
@@ -89,13 +105,15 @@ streamlit run app1.py
 
 ### 2. RAG-Enabled App (`app2.py`)
 
-Generate the vector store first:
+Fill the `data/` folder with pdfs of your own choice. And run the following scripts
+
+1. Generate the vector store first:
 
 ```bash
 python vectorstore_builder.py
 ```
 
-Then run the RAG-based app:
+2. Then run the RAG-based app:
 
 ```bash
 streamlit run app2.py
@@ -108,10 +126,10 @@ streamlit run app2.py
 First install `plotly`
 
 ```bash
-pip install plotly
+pip install plotly nbformat>=4.2.0
 ```
 
-Then run the `visual.ipynb` notebook.
+Then run the `visual.ipynb` notebook. 
 
 ---
 
