@@ -96,7 +96,7 @@ pip install ollama torch transformers datasets scikit-learn ipykernel streamlit 
 
 You see this ollama, you  may right click on it, to close it from keep runnning in background.
 
-Run `ollama serve` in a new termnial `cmd`, outside VS code.
+Run `ollama serve` in a new termnial `cmd`, outside VS code. and keep it like that, dont do anything with that.
 
 </i>
 
