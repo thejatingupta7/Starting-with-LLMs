@@ -15,9 +15,38 @@ def get_response_stream(query):
     Stream the response from the model for the given query
     """
     try:
+        # System prompt to guide the model's behavior
+        system_prompt = {
+            'role': 'system',
+            'content': """
+                You are a Legal Expert specializing in Indian law, providing precise and reliable legal guidance.
+
+                ⚖️ Instructions:
+                - Align all responses strictly with Indian legal provisions and case laws.
+                - If answer options are given, respond only from those options.
+                - Do not include unnecessary explanations or opinions—stick to legal facts.
+
+                Reference sources include:
+                - Statutory text
+                - Case law
+                - Legal documents
+
+                If the question is not legal in nature, politely refuse and state that you only assist with legal queries.
+
+                📝 Format your reply as:
+                - Question: [Restate briefly]
+                - Answer: [Your structured legal response]
+                """
+            }
+
+        messages = [
+            system_prompt,
+            {'role': 'user', 'content': query}
+        ]
+
         stream = chat(
-            model='llama3.2:1b',
-            messages=[{'role': 'user', 'content': query}],
+            model='llama3.1:8b', # llama3.1:8b
+            messages=messages,
             stream=True,
         )
         response = ""
@@ -30,6 +59,7 @@ def get_response_stream(query):
         st.error(error_msg)
         st.error(traceback.format_exc())
         yield "Sorry, I encountered an issue processing your query."
+
 
 def setup_llm():
     """Placeholder for LLM setup"""
