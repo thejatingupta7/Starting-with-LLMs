@@ -92,9 +92,15 @@ streamlit run app2.py
 
 ---
 
-### 3. Visualize Your Vectorstore
+### Viusalize the vectorstore in 3d
+
+First install `plotly`
 
 ```bash
-python visual.py
+pip install plotly
 ```
+
+Then run the `visual.ipynb` notebook.
+
+---
 
