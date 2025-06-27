@@ -19,6 +19,8 @@ A quick guide to get started with local LLMs using Python, Ollama, and Streamlit
 
 ## 🔁 Clone the Repository
 
+Either run the below command, or directly download and unzip the folder:
+
 ```bash
 git clone https://github.com/thejatingupta7/Starting-with-LLMs.git
 cd Starting-with-LLMs
