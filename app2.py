@@ -14,17 +14,17 @@ retriever = load_vector_store("vectorstore", embedding_model)
 
 rag_prompt_template = PromptTemplate(
     template="""
-You are a legal expert in Indian Law and Jurisdiction. Use the following context to answer the legal question. 
-If the question is not legal, respond that you only assist with legal queries.
-
-Context:
-{context}
-
-Question:
-{question}
-
-Answer:
-""",
+            You are a legal expert in Indian Law and Jurisdiction. Use the following context to answer the legal question. 
+            If the question is not legal, respond that you only assist with legal queries.
+            
+            Context:
+            {context}
+            
+            Question:
+            {question}
+            
+            Answer:
+            """,
     input_variables=["context", "question"]
 )
 
