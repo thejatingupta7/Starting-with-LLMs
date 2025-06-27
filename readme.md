@@ -51,8 +51,8 @@ pip install ollama torch transformers datasets scikit-learn ipykernel streamlit 
 ## 📥 Download the Base LLM
 
 1. Download and install **Ollama** from [https://ollama.com](https://ollama.com).
-
-2. Install it in the same directory where your code/venv resides (recommended):
+#### or
+1. Install it in the same directory where your code/venv resides (recommended):
 
    ```powershell
    .\OllamaSetup.exe /DIR="D:\Ollama"
