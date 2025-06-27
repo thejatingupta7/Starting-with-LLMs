@@ -65,6 +65,16 @@ pip install ollama torch transformers datasets scikit-learn ipykernel streamlit 
    ```
 
 ---
+<i>
+   
+#### Backend Data Flow
+
+Run `ollama serve` in a new termnial.
+
+</i>
+
+---
+
 
 ## 🚀 Run the Apps
 
@@ -92,7 +102,7 @@ streamlit run app2.py
 
 ---
 
-### Viusalize the vectorstore in 3d
+## Viusalize the vectorstore in 3d
 
 First install `plotly`
 
