@@ -1,26 +1,53 @@
 import streamlit as st
 import traceback
-import os
 
 from ollama import chat
 from langchain_utils import (
     load_embedding_model,
     load_vector_store,
-    load_qa_chain,
 )
 from langchain_core.prompts import PromptTemplate
 
-# --- Streamlit + Chat Streaming Handler (no LangChain callbacks) ---
-def get_response_stream(query):
+# --- RAG Setup ---
+embedding_model = load_embedding_model("all-MiniLM-L6-v2")
+retriever = load_vector_store("vectorstore", embedding_model)
+
+rag_prompt_template = PromptTemplate(
+    template="""
+You are a legal expert in Indian Law and Jurisdiction. Use the following context to answer the legal question. 
+If the question is not legal, respond that you only assist with legal queries.
+
+Context:
+{context}
+
+Question:
+{question}
+
+Answer:
+""",
+    input_variables=["context", "question"]
+)
+
+# --- Streamlit + Streaming RAG Logic ---
+def get_rag_response_stream(query):
     try:
+        # Step 1: Retrieve documents
+        docs = retriever.get_relevant_documents(query)
+        context = "\n\n".join([doc.page_content for doc in docs[:4]]) or "No relevant documents found."
+
+        # Step 2: Format prompt with context
+        formatted_prompt = rag_prompt_template.format(context=context, question=query)
+
+        # Step 3: Stream from model
         stream = chat(
             model='llama3.2:1b',
-            messages=[{'role': 'user', 'content': query}],
+            messages=[{'role': 'user', 'content': formatted_prompt}],
             stream=True,
         )
         for chunk in stream:
             content = chunk['message']['content']
             yield content
+
     except Exception as e:
         st.error(f"An error occurred: {e}")
         st.error(traceback.format_exc())
@@ -48,22 +75,6 @@ def add_custom_css():
     }
     </style>
     """, unsafe_allow_html=True)
-
-# --- Retrieval Chain for Legal Domain ---
-def setup_retrieval_chain():
-    embedding_model = load_embedding_model("all-MiniLM-L6-v2")
-    retriever = load_vector_store("vectorstore", embedding_model)
-    prompt = PromptTemplate(
-        template="""
-        You are a legal expert in Indian Law and Jurisdiction. Use the following context to answer questions asked. Do not answer questions that are not in the legal domain.
-
-        Context: {context}
-        Question: {question}
-        Answer:
-        """,
-        input_variables=["context", "question"]
-    )
-    return load_qa_chain(retriever, None, prompt)
 
 # --- Main App ---
 def main():
@@ -99,8 +110,8 @@ def main():
         st.session_state['history'].append({"user": user_query, "response": ""})
         response_container = st.empty()
         full_response = ""
-        with st.spinner("Analyzing your legal query…"):
-            for chunk in get_response_stream(user_query):
+        with st.spinner("Retrieving legal context and generating response..."):
+            for chunk in get_rag_response_stream(user_query):
                 full_response += chunk
                 response_container.markdown(f"**Response:** {full_response}▌")
         st.session_state['history'][-1]["response"] = full_response
