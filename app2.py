@@ -1,29 +1,38 @@
 import streamlit as st
 import traceback
-from langchain_community.llms import Ollama
+import os
+
+from ollama import chat
+from langchain_utils import (
+    load_embedding_model,
+    load_vector_store,
+    load_qa_chain,   # still used if you want to do retrieval-based answers
+)
 from langchain_core.prompts import PromptTemplate
-from langchain.callbacks.base import BaseCallbackHandler
 
-# Import from your utils
-from langchain_utils import load_embedding_model, load_vector_store, load_qa_chain
+# --- Streamlit + Chat Streaming Handler (no LangChain callbacks) ---
+def get_response_stream(query):
+    """
+    Stream the response from ollama.chat for the given query.
+    """
+    try:
+        stream = chat(
+            model='llama3.1:8b',
+            messages=[{'role': 'user', 'content': query}],
+            stream=True,
+        )
+        for chunk in stream:
+            # each chunk is a dict like {'message': {'content': '…'}}
+            content = chunk['message']['content']
+            yield content
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+        st.error(traceback.format_exc())
+        yield "[Error generating response]"
 
-# ------------- Streamlit + LangChain Token Handler -------------
-class StreamlitStreamHandler(BaseCallbackHandler):
-    def __init__(self, container):
-        self.container = container
-        self.text = ""
-
-    def on_llm_new_token(self, token: str, **kwargs):
-        self.text += token
-        self.container.markdown(f"**Response:** {self.text}▌")  # typing effect
-
-# ------------- Streamlit Page Setup -------------
+# --- Page setup and styling ---
 def configure_page():
-    st.set_page_config(
-        page_title="CA-ThinkFlow",
-        page_icon="💰",
-        layout="wide"
-    )
+    st.set_page_config(page_title="CA-ThinkFlow", page_icon="💰", layout="wide")
 
 def add_custom_css():
     st.markdown("""
@@ -44,50 +53,33 @@ def add_custom_css():
     </style>
     """, unsafe_allow_html=True)
 
-# ------------- Setup LangChain LLM and QA Chain -------------
-def setup_llm_and_chain(stream_handler):
-    try:
-        embedding_model = load_embedding_model("all-MiniLM-L6-v2")
-        retriever = load_vector_store("vectorstore", embedding_model)
+# --- (Optional) retrieval-based setup if you still want context from your PDFs ---
+def setup_retrieval_chain():
+    embedding_model = load_embedding_model("all-MiniLM-L6-v2")
+    retriever = load_vector_store("vectorstore", embedding_model)
+    prompt = PromptTemplate(
+        template="""
+        You are a financial expert. Use the following context to answer.
 
-        prompt_template = PromptTemplate(
-            template="""
-            You are a financial expert specializing in detailed analysis of financial statements and performing a wide range of data-driven financial tasks. 
+        Context: {context}
+        Question: {question}
+        Answer:
+        """,
+        input_variables=["context", "question"]
+    )
+    return load_qa_chain(retriever, None, prompt)  # llm=None since we call chat() ourselves
 
-            Context: {context}
-            Question: {question}
-            Answer:
-            """,
-            input_variables=["context", "question"]
-        )
-
-        llm = Ollama(
-            model="llama3.1:8b",
-            temperature=0.7,
-            # streaming=True,
-            callbacks=[stream_handler],
-            verbose=True
-        )
-
-        chain = load_qa_chain(retriever, llm, prompt_template)
-        return chain
-    except Exception as e:
-        st.error(f"Error setting up LLM and Chain: {e}")
-        st.error(traceback.format_exc())
-        return None
-
-# ------------- Main App Logic -------------
+# --- Main App ---
 def main():
     configure_page()
     add_custom_css()
-
     st.title("CA-ThinkFlow 🪙💰💱")
     st.subheader("Your AI Financial Consultant")
 
     if 'history' not in st.session_state:
         st.session_state['history'] = []
 
-    # --- Predefined financial query buttons ---
+    # Predefined buttons
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         if st.button("Tax Benefits - Rental Income"):
@@ -107,29 +99,25 @@ def main():
         value=st.session_state.get('user_query', "")
     )
 
-    # --- Stream LLM Response ---
     if user_query:
         st.session_state['history'].append({"user": user_query, "response": ""})
-        with st.spinner("Analyzing your query..."):
-            response_container = st.empty()  # placeholder for streaming response
-            stream_handler = StreamlitStreamHandler(response_container)
-            chain = setup_llm_and_chain(stream_handler)
+        response_container = st.empty()
+        full_response = ""
+        with st.spinner("Analyzing your query…"):
+            for chunk in get_response_stream(user_query):
+                full_response += chunk
+                response_container.markdown(f"**Response:** {full_response}▌")
+        # save final
+        st.session_state['history'][-1]["response"] = full_response
 
-            if chain:
-                try:
-                    chain({"query": user_query})  # Streamed output gets handled live
-                    st.session_state['history'][-1]["response"] = stream_handler.text
-                except Exception as e:
-                    st.error("Something went wrong during streaming.")
-                    st.error(traceback.format_exc())
-
-    # --- Show Sidebar History ---
+    # Sidebar history
     with st.sidebar:
         st.header("Conversation History")
         for entry in reversed(st.session_state['history'][-5:]):
             st.markdown(f"*Q:* {entry['user']}")
             st.markdown(f"*A:* {entry['response']}")
             st.markdown("---")
+
 
 if __name__ == "__main__":
     main()
