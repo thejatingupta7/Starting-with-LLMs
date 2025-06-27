@@ -50,19 +50,20 @@ pip install ollama torch transformers datasets scikit-learn ipykernel streamlit 
 
 ## 📥 Download the Base LLM
 
-1. Download and install **Ollama** from [https://ollama.com](https://ollama.com).
+1. Download and install **Ollama** from [https://ollama.com](https://ollama.com). (installing directly saves in C drive)
 #### or
-1. Install it in the same directory where your code/venv resides (recommended):
+1. To install it in D Drive, put downloaded `ollama.exe` file in the same folder as our code, then run this command:
 
    ```powershell
    .\OllamaSetup.exe /DIR="D:\Ollama"
    ```
 
-3. Pull the base quantized model:
+3. Pull the base quantized model in another command prompt `cmd` outside VS code:
 
    ```bash
    ollama pull llama3.2:1b
    ```
+   <b>Remember one thing, smaller models like these: `llama3.2:1b`, don't follow System prompt well.</b>
 
 ---
 <i>
