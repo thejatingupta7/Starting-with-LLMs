@@ -14,6 +14,7 @@ A quick guide to get started with local LLMs using Python, Ollama, and Streamlit
 
 * Python: **3.13.2** or any compatible version.
 * Git (for cloning the repository).
+* VS Code Installed
 
 ---
 
