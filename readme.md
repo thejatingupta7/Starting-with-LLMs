@@ -33,16 +33,25 @@ cd Starting-with-LLMs
 
 ### Create a Virtual Environment
 
+#### Windows
 ```powershell
 python -m venv myenv
+```
+#### MacOS
+```powershell
+python3 -m venv myenv
 ```
 
 ### Activate the virtual Env.
 
+#### Windows
+
 ```powershell
 myenv\Scripts\activate       
 ```
+
 or 
+
 ```powershell
 .\myenv\Scripts\Activate.ps1
 ```
@@ -51,6 +60,11 @@ If above gives error: try running this in terminal, then activate:
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
+#### MacOS
+
+```powershell
+source myenv/bin/activate
+```
 
 ---
 
@@ -63,7 +77,7 @@ pip install torch torchvision torchaudio --force-reinstall --index-url https://d
 pip install ollama transformers datasets scikit-learn ipykernel streamlit faiss-cpu hf-xet langchain langchain-community sentence-transformers openpyxl pymupdf 
 ```
 
-### For CPU Users:
+### For CPU/MPS Users:
 
 ```bash
 pip install ollama torch transformers datasets scikit-learn ipykernel streamlit faiss-cpu hf-xet langchain langchain-community sentence-transformers openpyxl pymupdf 
