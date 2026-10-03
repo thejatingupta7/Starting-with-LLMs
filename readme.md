@@ -187,3 +187,9 @@ When you actually see the vectorstore visually, you be like:<br>
 These commands form the foundation for managing and interacting with models in Ollama via the command line.
 
 ---
+<h2>🧑‍🏫 Training Session</h1>
+<div align="center">
+  <img width="720" height="550" alt="Screenshot_2025-06-28-10-34-08-58~2" src="https://github.com/user-attachments/assets/a9e5133d-7bb3-4522-b01f-1e5e295fdf39" />
+</div>
+
+---
